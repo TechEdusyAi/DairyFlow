@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import RevenueChart from "@/components/charts/revenue-chart";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import RevenueChart from "../../components/charts/revenue-chart";
+import Sidebar from "../../components/layout/sidebar";
 import { IndianRupee, Users, CalendarCheck, Truck, TrendingUp, Package, ShieldCheck, Download, Route, Clock, CheckCircle } from "lucide-react";
+import type { AnalyticsData } from "../../lib/types";
 
 export default function AdminDashboard() {
   const { toast } = useToast();
@@ -27,7 +28,7 @@ export default function AdminDashboard() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<AnalyticsData>({
     queryKey: ["/api/admin/analytics"],
     retry: false,
   });

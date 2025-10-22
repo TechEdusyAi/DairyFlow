@@ -67,6 +67,8 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: false,
+      // Ensure proper typing for query results
+      select: (data: any) => data,
     },
     mutations: {
       retry: false,

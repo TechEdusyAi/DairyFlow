@@ -1,16 +1,30 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import DeliveryMap from "@/components/maps/delivery-map";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { apiRequest, queryClient } from "../../lib/queryClient";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import { Input } from "../../components/ui/input";
+import DeliveryMap from "../../components/maps/delivery-map";
+
+interface DeliveryStop {
+  id: string;
+  sequence: number;
+  status: string;
+  address?: {
+    line1: string;
+    area: string;
+    city: string;
+    latitude?: string;
+    longitude?: string;
+  };
+}
+import Sidebar from "../../components/layout/sidebar";
 import { CheckCircle, Phone, Navigation, MapPin, Clock, Package } from "lucide-react";
+import type { RouteData } from "../../lib/types";
 
 export default function AgentRoute() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -31,7 +45,7 @@ export default function AgentRoute() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: route, isLoading: routeLoading } = useQuery({
+  const { data: route, isLoading: routeLoading } = useQuery<RouteData | undefined>({
     queryKey: ["/api/agent/route", { date: selectedDate }],
     retry: false,
   });
@@ -208,12 +222,23 @@ export default function AgentRoute() {
           {/* Map View */}
           <Card data-testid="card-route-map">
             <CardContent className="p-0">
-              <DeliveryMap 
-                stops={route?.stops || []} 
-                depot={{ 
-                  latitude: route?.depotLatitude || 11.0168, 
-                  longitude: route?.depotLongitude || 76.9558 
-                }} 
+              <DeliveryMap
+                stops={(route?.stops || []).map(stop => ({
+                  id: stop.id,
+                  sequence: stop.sequence,
+                  status: stop.status,
+                  address: stop.address ? {
+                    line1: stop.address.line1,
+                    area: stop.address.area || '',
+                    city: stop.address.city,
+                    latitude: stop.address.latitude?.toString(),
+                    longitude: stop.address.longitude?.toString(),
+                  } : undefined
+                }))}
+                depot={{
+                  latitude: parseFloat(route?.depotLatitude || '11.0168'),
+                  longitude: parseFloat(route?.depotLongitude || '76.9558')
+                }}
               />
             </CardContent>
           </Card>

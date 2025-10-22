@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { apiRequest, queryClient } from "../../lib/queryClient";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
+import { Switch } from "../../components/ui/switch";
+import { Textarea } from "../../components/ui/textarea";
+import Sidebar from "../../components/layout/sidebar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Search, Filter, Plus, Edit, Package, Warehouse, Eye } from "lucide-react";
+import type { ProductData } from "../../lib/types";
 
 const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -65,12 +66,12 @@ export default function AdminProducts() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: products, isLoading: productsLoading } = useQuery<ProductData[]>({
     queryKey: ["/api/admin/products"],
     retry: false,
   });
 
-  const { data: inventory, isLoading: inventoryLoading } = useQuery({
+  const { data: inventory, isLoading: inventoryLoading } = useQuery<any[]>({
     queryKey: ["/api/admin/inventory"],
     retry: false,
   });

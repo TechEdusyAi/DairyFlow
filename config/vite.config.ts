@@ -9,13 +9,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "apps/web/src"),
-      "@shared": path.resolve(__dirname, "packages/types/src"),
+      "@": path.resolve(__dirname, "../apps/web/src"),
     },
   },
-  root: path.resolve(__dirname, "apps/web"),
+  root: path.resolve(__dirname, "../apps/web"),
   build: {
-    outDir: path.resolve(__dirname, "dist"),
+    outDir: path.resolve(__dirname, "../dist"),
     emptyOutDir: true,
   },
   server: {

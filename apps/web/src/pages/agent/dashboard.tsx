@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import Sidebar from "../../components/layout/sidebar";
 import { Calendar, MapPin, Clock, CheckCircle, Truck, Route } from "lucide-react";
+import type { RouteData } from "../../lib/types";
 
 export default function AgentDashboard() {
   const { toast } = useToast();
@@ -27,7 +28,7 @@ export default function AgentDashboard() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: todayRoute, isLoading: routeLoading } = useQuery({
+  const { data: todayRoute, isLoading: routeLoading } = useQuery<RouteData | undefined>({
     queryKey: ["/api/agent/route", { date: new Date().toISOString().split('T')[0] }],
     retry: false,
   });

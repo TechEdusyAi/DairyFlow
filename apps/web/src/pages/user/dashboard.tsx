@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import Sidebar from "../../components/layout/sidebar";
 import { CalendarCheck, Truck, IndianRupee, Wallet, Plus } from "lucide-react";
+import type { SubscriptionData, OrderData } from "../../lib/types";
 
 export default function UserDashboard() {
   const { toast } = useToast();
@@ -27,17 +28,17 @@ export default function UserDashboard() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: subscriptions, isLoading: subscriptionsLoading } = useQuery({
+  const { data: subscriptions, isLoading: subscriptionsLoading } = useQuery<SubscriptionData[]>({
     queryKey: ["/api/user/subscriptions"],
     retry: false,
   });
 
-  const { data: orders, isLoading: ordersLoading } = useQuery({
+  const { data: orders, isLoading: ordersLoading } = useQuery<OrderData[]>({
     queryKey: ["/api/user/orders"],
     retry: false,
   });
 
-  const { data: addresses } = useQuery({
+  const { data: addresses } = useQuery<any[]>({
     queryKey: ["/api/user/addresses"],
     retry: false,
   });
@@ -50,8 +51,8 @@ export default function UserDashboard() {
     );
   }
 
-  const activeSubscriptions = subscriptions?.filter((sub: any) => sub.status === 'active') || [];
-  const recentOrders = orders?.slice(0, 3) || [];
+  const activeSubscriptions = (subscriptions || []).filter((sub: any) => sub.status === 'active');
+  const recentOrders = (orders || []).slice(0, 3);
   const pendingDeliveries = 5; // Mock data - would come from API
   const monthlySpend = 1240; // Mock data
   const prepaidBalance = 850; // Mock data

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { apiRequest, queryClient } from "../../lib/queryClient";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import Sidebar from "../../components/layout/sidebar";
 import { Search, Filter, Package, Truck, CheckCircle, Clock, Eye, Edit, MoreHorizontal, User, MapPin, Phone } from "lucide-react";
+import type { OrderData } from "../../lib/types";
 
 export default function AdminOrders() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +34,7 @@ export default function AdminOrders() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: orders, isLoading: ordersLoading } = useQuery({
+  const { data: orders, isLoading: ordersLoading } = useQuery<OrderData[]>({
     queryKey: ["/api/admin/orders"],
     retry: false,
   });

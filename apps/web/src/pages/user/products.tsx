@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import Sidebar from "@/components/layout/sidebar";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/use-toast";
+import { isUnauthorizedError } from "../../lib/authUtils";
+import { apiRequest, queryClient } from "../../lib/queryClient";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Badge } from "../../components/ui/badge";
+import { Input } from "../../components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
+import Sidebar from "../../components/layout/sidebar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Search, ShoppingCart, Plus, Minus, Milk } from "lucide-react";
+import type { ProductData } from "../../lib/types";
 
 const orderSchema = z.object({
   addressId: z.string().min(1, "Delivery address is required"),
@@ -58,12 +59,12 @@ export default function UserProducts() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: products, isLoading: productsLoading } = useQuery<ProductData[]>({
     queryKey: ["/api/products"],
     retry: false,
   });
 
-  const { data: addresses } = useQuery({
+  const { data: addresses } = useQuery<any[]>({
     queryKey: ["/api/user/addresses"],
     retry: false,
   });
@@ -129,7 +130,7 @@ export default function UserProducts() {
     if (!products) return 0;
     return Object.entries(cart).reduce((total, [productId, quantity]) => {
       const product = products.find((p: any) => p.id === productId);
-      return total + (product ? parseFloat(product.price) * quantity : 0);
+      return total + (product ? product.price * quantity : 0);
     }, 0);
   };
 
@@ -148,7 +149,7 @@ export default function UserProducts() {
       return {
         productId,
         quantity,
-        price: parseFloat(product?.price || "0")
+        price: product?.price || 0
       };
     });
 
@@ -348,7 +349,7 @@ export default function UserProducts() {
                     return (
                       <div key={productId} className="flex justify-between text-sm">
                         <span>{product.name} × {quantity}</span>
-                        <span>₹{(parseFloat(product.price) * quantity).toFixed(2)}</span>
+                        <span>₹{(product.price * quantity).toFixed(2)}</span>
                       </div>
                     );
                   })}
