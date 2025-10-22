@@ -11,7 +11,7 @@ import {
   insertSubscriptionSchema,
   insertAddressSchema,
   insertAgentDetailsSchema
-} from "../../../packages/types/index";
+} from "@dairyflow/types";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {

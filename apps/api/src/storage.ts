@@ -36,7 +36,7 @@ import {
   type InsertInvoice,
   type LedgerEntry,
   type InsertLedgerEntry,
-} from "../../../packages/types/index";
+} from "@dairyflow/types";
 import { db } from "./db";
 import { eq, and, gte, lte, desc, asc, sql } from "drizzle-orm";
 

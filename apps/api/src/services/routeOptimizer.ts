@@ -1,4 +1,4 @@
-import type { SubscriptionDelivery, Subscription, User, Product, Address } from "../../../packages/types";
+import type { SubscriptionDelivery, Subscription, User, Product, Address } from "@dairyflow/types";
 
 interface DeliveryWithDetails extends SubscriptionDelivery {
   id: string;
