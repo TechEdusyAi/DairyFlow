@@ -13,7 +13,7 @@ DairyFlow is a full-stack TypeScript application that helps dairy businesses man
 
 ## 🏗️ Architecture
 
-**Current Status:** Web application (React + Express)
+**Current Status:** Production-ready web application with Supabase backend
 **Planned:** Mobile apps for customers and delivery agents
 
 ### Tech Stack
@@ -28,10 +28,10 @@ DairyFlow is a full-stack TypeScript application that helps dairy businesses man
 **Backend:**
 - Express.js + TypeScript
 - Drizzle ORM
-- PostgreSQL (migrating to Supabase)
+- Supabase PostgreSQL + Auth
 
 **Services:**
-- 🔜 Supabase (Database + Auth + Storage)
+- ✅ Supabase (Database + Auth + Storage)
 - 🔜 MapmyIndia (Maps + Geocoding + Navigation)
 - 🔜 Twilio (SMS OTP)
 - 🔜 Razorpay (Payments)
@@ -40,8 +40,8 @@ DairyFlow is a full-stack TypeScript application that helps dairy businesses man
 
 ### Prerequisites
 - Node.js 20+
-- PostgreSQL 16 (or Supabase account)
-- npm or pnpm
+- Supabase account
+- npm
 
 ### Installation
 
@@ -55,33 +55,29 @@ npm install
 
 # Setup environment variables
 cp .env.example .env
-# Edit .env with your configuration
+# Edit .env with your Supabase configuration
 
 # Push database schema
 npm run db:push
 
-# Start development server
-npm run dev
+# Start development servers
+npm run dev          # Web app at http://localhost:5173
+npm run dev:api      # API server at http://localhost:5000
 ```
 
-The app will be available at `http://localhost:5000`
-
-## 📁 Project Structure
+## 📁 Project Structure (Monorepo)
 
 ```
-├── client/           # React frontend
-│   └── src/
-│       ├── pages/    # Role-based pages (user, agent, admin)
-│       ├── components/
-│       ├── hooks/
-│       └── lib/
-├── server/           # Express backend
-│   ├── services/     # Business logic
-│   ├── routes.ts     # API endpoints
-│   ├── storage.ts    # Database layer
-│   └── db.ts         # DB connection
-└── shared/           # Shared types/schemas
-    └── schema.ts     # Drizzle ORM schema
+├── apps/             # Applications
+│   ├── web/         # React frontend application
+│   │   ├── src/    # Source code
+│   │   └── package.json
+│   └── api/         # Express backend API
+│       └── src/     # API source code
+├── packages/        # Shared packages
+│   └── types/       # Shared TypeScript types & schemas
+├── docs/           # Documentation
+└── package.json    # Root package.json with workspaces
 ```
 
 ## 🔑 Environment Variables
@@ -119,21 +115,16 @@ RAZORPAY_KEY_SECRET=your_razorpay_secret
 ## 🛠️ Development Commands
 
 ```bash
-# Development with hot-reload
-npm run dev
+# Development servers
+npm run dev          # Start web app (http://localhost:5173)
+npm run dev:api      # Start API server (http://localhost:5000)
 
-# Type checking
-npm run check
-
-# Build for production
-npm run build
-
-# Start production server
-npm run start
+# Build commands
+npm run build        # Build all workspaces
+npm run check        # Type checking across workspaces
 
 # Database operations
-npm run db:push        # Push schema changes
-npm run db:generate    # Generate migrations
+npm run db:push      # Push schema changes to Supabase
 ```
 
 ## 👥 User Roles
@@ -166,23 +157,24 @@ React Native apps are planned for:
 
 See [PROJECT_PLAN.md](./PROJECT_PLAN.md) for development roadmap.
 
-## 🗺️ Roadmap
+## 🗺️ Current Status & Roadmap
 
-### Phase 1: Web Application ⭐ CURRENT
-- [x] Basic structure and schema
-- [ ] Supabase migration
-- [ ] Phone OTP + Google auth
+### ✅ Phase 1: Web Application (COMPLETED)
+- [x] Monorepo structure with workspaces
+- [x] Supabase database & authentication
+- [x] Phone OTP + Google OAuth
+- [x] Role-based access control
 - [ ] MapmyIndia integration
-- [ ] Payment gateway
+- [ ] Payment gateway (Razorpay)
 - [ ] Production deployment
 
-### Phase 2: Mobile Apps
+### 🔄 Phase 2: Mobile Apps (NEXT)
 - [ ] React Native setup
 - [ ] Customer mobile app
 - [ ] Agent mobile app
 - [ ] Play Store launch
 
-### Phase 3: Advanced Features
+### 🔮 Phase 3: Advanced Features (FUTURE)
 - [ ] Real-time tracking
 - [ ] AI-powered route optimization
 - [ ] Predictive analytics
